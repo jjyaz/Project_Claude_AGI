@@ -25,6 +25,7 @@ interface ProjectState {
   dependencies: string[];
   framework: string;
 }
+
 const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
   const [selectedMode, setSelectedMode] = useState<BuildMode | null>(null);
   const [terminalLines, setTerminalLines] = useState<TerminalLine[]>([]);
@@ -1381,10 +1382,6 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
     };
   };
 
-    const modeResponses = responses[mode];
-    return modeResponses[Math.floor(Math.random() * modeResponses.length)];
-  };
-
   const handleCommand = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentCommand.trim() || !selectedMode) return;
@@ -1679,7 +1676,7 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
                           {example}
                         </div>
                       ))}
-                    <span>{projectState.files.length}</span>
+                    </div>
                   </div>
                 </div>
               );
@@ -1867,12 +1864,11 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
               </div>
             </div>
             <div className="flex-1 bg-white overflow-auto">
-              <div className="w-full h-full overflow-auto">
-                <div 
-                  dangerouslySetInnerHTML={{ __html: previewContent }}
-                  className="w-full h-full"
-                />
-              </div>
+              <iframe
+                srcDoc={previewContent}
+                className="w-full h-full border-0"
+                title="Preview"
+              />
             </div>
           </div>
         )}
@@ -1918,17 +1914,17 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between text-gray-300">
                   <span>Files:</span>
-                  <span>0</span>
+                  <span>{projectState.files.length}</span>
                 </div>
                 <div className="flex justify-between text-gray-300">
-                    <span>{projectState.files.reduce((total, file) => total + file.content.split('\n').length, 0)}</span>
-                  <span>0</span>
+                  <span>Lines:</span>
+                  <span>{projectState.files.reduce((total, file) => total + file.content.split('\n').length, 0)}</span>
                 </div>
                 <div className="flex justify-between text-gray-300">
-                    <span className={projectState.files.length > 0 ? "text-green-400" : "text-yellow-400"}>
-                      {projectState.files.length > 0 ? "Built" : "Ready"}
-                    </span>
-                  <span className="text-green-400">Ready</span>
+                  <span>Status:</span>
+                  <span className={projectState.files.length > 0 ? "text-green-400" : "text-yellow-400"}>
+                    {projectState.files.length > 0 ? "Built" : "Ready"}
+                  </span>
                 </div>
               </div>
               
