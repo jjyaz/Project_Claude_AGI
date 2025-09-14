@@ -32,7 +32,7 @@ const UserSetup: React.FC<UserSetupProps> = ({ onComplete }) => {
       {/* Background GIF */}
       <div className="absolute inset-0 w-full h-full z-0">
         <img 
-          src="/public/Adobe Express - claude agi (1).gif" 
+          src="/Adobe Express - claude agi (1).gif" 
           alt="Background"
           className="w-full h-full object-cover"
         />

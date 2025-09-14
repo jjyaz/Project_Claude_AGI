@@ -114,7 +114,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ username, userProfilePic,
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-blue-500">
               <img 
-                src="/public/Adobe Express - claude agi (1).gif" 
+                src="/Adobe Express - claude agi (1).gif" 
                 alt="Claude AGI"
                 className="w-full h-full object-cover"
               />
@@ -150,7 +150,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ username, userProfilePic,
                     )
                   ) : (
                     <img 
-                      src="/public/Adobe Express - claude agi (1).gif" 
+                      src="/Adobe Express - claude agi (1).gif" 
                       alt="Claude AGI"
                       className="w-full h-full object-cover"
                     />
@@ -180,7 +180,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ username, userProfilePic,
               <div className="flex items-start space-x-3">
                 <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-600">
                   <img 
-                    src="/public/Adobe Express - claude agi (1).gif" 
+                    src="/Adobe Express - claude agi (1).gif" 
                     alt="Claude AGI"
                     className="w-full h-full object-cover"
                   />
