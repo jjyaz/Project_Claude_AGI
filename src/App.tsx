@@ -166,9 +166,14 @@ function App() {
               >
                 Code With Claude
               </button>
-              <button className="px-8 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-gray-500/25">
-                Gitbook
-              </button>
+              <a 
+                href="https://github.com/jjyaz/Project_Claude_AGI"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-8 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-gray-500/25 inline-block text-center"
+              >
+                Github
+              </a>
             </div>
           </div>
         </div>
