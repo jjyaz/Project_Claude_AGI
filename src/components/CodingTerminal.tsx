@@ -1412,6 +1412,10 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
         const htmlFile = result.files.find(f => f.type === 'html');
         if (htmlFile) {
           setPreviewContent(htmlFile.content);
+          // Force preview to show if it's hidden
+          if (!showPreview) {
+            setShowPreview(true);
+          }
         }
       }
       
@@ -1435,7 +1439,7 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
 
       setTerminalLines(prev => [...prev, ...lines]);
       setIsProcessing(false);
-    }, 1000 + Math.random() * 1500);
+    }, 800 + Math.random() * 1000); // Faster response time
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -1560,23 +1564,18 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
     } else {
       // Default preview content
       const currentMode = modes[selectedMode];
-      if (!currentMode) {
-        console.error('Invalid selectedMode:', selectedMode);
-        return;
-      }
-      
       const previewHtml = `
         <div style="padding: 20px; font-family: Arial, sans-serif;">
           <h2 style="color: #333; margin-bottom: 20px;">${projectName || 'My Project'} Preview</h2>
           <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-            <h3 style="color: #667eea; margin-top: 0;">Project Type: ${currentMode.title}</h3>
-            <p style="color: #666; margin-bottom: 0;">${currentMode.description}</p>
+            <h3 style="color: #667eea; margin-top: 0;">Project Type: ${currentMode ? currentMode.title : 'Unknown'}</h3>
+            <p style="color: #666; margin-bottom: 0;">${currentMode ? currentMode.description : 'Select a project type to begin'}</p>
           </div>
           <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; border-left: 4px solid #2196f3;">
             <h4 style="margin-top: 0; color: #1976d2;">Live Preview</h4>
             <p style="color: #666; margin-bottom: 0;">Your ${selectedMode} project will appear here as you build it with Claude. Try commands like:</p>
             <ul style="color: #666; margin-top: 10px;">
-              ${currentMode.examples ? currentMode.examples.map(example => `<li>"create ${example.toLowerCase()}"</li>`).join('') : ''}
+              ${currentMode && currentMode.examples ? currentMode.examples.map(example => `<li>"create ${example.toLowerCase()}"</li>`).join('') : '<li>Enter a command to get started</li>'}
             </ul>
           </div>
         </div>
@@ -1870,10 +1869,10 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
               </div>
             </div>
             <div className="flex-1 bg-white overflow-auto">
-              <div className="w-full h-full overflow-auto">
+              <div className="w-full h-full overflow-auto bg-white">
                 <div 
                   dangerouslySetInnerHTML={{ __html: previewContent }}
-                  className="w-full h-full"
+                  className="w-full min-h-full"
                 />
               </div>
             </div>
