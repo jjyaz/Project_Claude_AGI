@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Terminal, Gamepad2, Globe, Brain, Send, Play, Save, Download, Settings, Upload } from 'lucide-react';
+import { ArrowLeft, Terminal, Gamepad2, Globe, Brain, Send, Play, Save, Download, Settings, Upload, ChevronDown, ChevronRight } from 'lucide-react';
 
 interface CodingTerminalProps {
   onBack: () => void;
@@ -25,6 +25,7 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
 
   const modes = {
     game: {
@@ -416,22 +417,34 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
           <div className="space-y-6">
             {/* Quick Actions */}
             <div>
-              <h3 className="text-white font-semibold mb-3">Quick Actions</h3>
-              <div className="space-y-2">
-                <button className="w-full px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors flex items-center space-x-2">
-                  <Play className="w-4 h-4" />
-                  <span>Run Project</span>
-                </button>
-                <button 
-                  onClick={() => setShowProjectDialog(true)}
-                  className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                >
-                  Create New Project
-                </button>
-                <button className="w-full px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
-                  Install Package
-                </button>
-              </div>
+              <button
+                onClick={() => setIsQuickActionsOpen(!isQuickActionsOpen)}
+                className="w-full flex items-center justify-between text-white font-semibold mb-3 hover:text-gray-300 transition-colors"
+              >
+                <span>Quick Actions</span>
+                {isQuickActionsOpen ? (
+                  <ChevronDown className="w-4 h-4" />
+                ) : (
+                  <ChevronRight className="w-4 h-4" />
+                )}
+              </button>
+              {isQuickActionsOpen && (
+                <div className="space-y-2">
+                  <button className="w-full px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors flex items-center space-x-2">
+                    <Play className="w-4 h-4" />
+                    <span>Run Project</span>
+                  </button>
+                  <button 
+                    onClick={() => setShowProjectDialog(true)}
+                    className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                  >
+                    Create New Project
+                  </button>
+                  <button className="w-full px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
+                    Install Package
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Project Stats */}
