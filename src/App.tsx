@@ -109,6 +109,24 @@ function App() {
       
       {/* Content */}
       <div className="relative z-10 flex flex-col justify-end items-center h-screen pb-16 px-4">
+        {/* X Logo - Top Left */}
+        <div className="absolute top-6 left-6 z-30">
+          <a 
+            href="https://x.com/Claude_AGI"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center w-12 h-12 bg-black bg-opacity-30 backdrop-blur-sm rounded-full hover:bg-opacity-50 transition-all duration-300 transform hover:scale-110"
+          >
+            <svg 
+              className="w-6 h-6 text-white" 
+              fill="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+        </div>
+        
         {/* Gradient overlay for text area */}
         <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
         
