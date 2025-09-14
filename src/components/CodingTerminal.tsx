@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Terminal, Gamepad2, Globe, Brain, Send, Play, Save, Download, Settings } from 'lucide-react';
+import { ArrowLeft, Terminal, Gamepad2, Globe, Brain, Send, Play, Save, Download, Settings, Upload } from 'lucide-react';
 
 interface CodingTerminalProps {
   onBack: () => void;
@@ -22,6 +22,8 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
   const [projectName, setProjectName] = useState('');
   const [showProjectDialog, setShowProjectDialog] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
 
   const modes = {
@@ -139,10 +141,33 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
     }, 1000 + Math.random() * 1500);
   };
 
-  const handleCreateNewProject = () => {
-    setShowProjectDialog(true);
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setUploadedFile(file);
+      
+      // Add file upload message to terminal
+      const uploadLine: TerminalLine = {
+        id: Date.now().toString(),
+        type: 'system',
+        content: `📁 File uploaded: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
+        timestamp: new Date()
+      };
+      
+      const claudeResponse: TerminalLine = {
+        id: (Date.now() + 1).toString(),
+        type: 'claude',
+        content: `Great! I can see you've uploaded "${file.name}". I can help you integrate this ${file.type.startsWith('image/') ? 'image' : file.type.startsWith('video/') ? 'video' : 'file'} into your project. What would you like to do with it?`,
+        timestamp: new Date()
+      };
+      
+      setTerminalLines(prev => [...prev, uploadLine, claudeResponse]);
+    }
   };
 
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
   const handleProjectSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newProjectName.trim()) {
@@ -360,6 +385,21 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
                 disabled={isProcessing}
               />
               <button
+                type="button"
+                onClick={handleUploadClick}
+                className="px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors flex items-center space-x-2"
+                title="Upload file"
+              >
+                <Upload className="w-4 h-4" />
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*,video/*,.gif"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <button
                 type="submit"
                 disabled={!currentCommand.trim() || isProcessing}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg transition-colors disabled:cursor-not-allowed flex items-center space-x-2"
@@ -382,11 +422,8 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
                   <Play className="w-4 h-4" />
                   <span>Run Project</span>
                 </button>
-                <button className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
-                  Create New Project
-                </button>
                 <button 
-                  onClick={handleCreateNewProject}
+                  onClick={() => setShowProjectDialog(true)}
                   className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                 >
                   Create New Project
