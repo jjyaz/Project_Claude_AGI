@@ -339,7 +339,7 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
 </html>`
             }
           ],
-          response: "Excellent! I've built a 2D platformer game with physics, jumping mechanics, and multiple platforms. Use arrow keys to move and spacebar to jump!"
+          response: "Excellent! I've built a 2D platformer game with physics, jumping mechanics, and multiple platforms. Use arrow keys to move and spacebar to jump! 👀 Check the live preview to see your game in action and test the controls."
         };
       }
     }
@@ -535,7 +535,7 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
 </html>`
             }
           ],
-          response: "Perfect! I've created a stunning portfolio website with modern design, smooth animations, and responsive layout. It includes hero section, projects showcase, and skills display!"
+          response: "Perfect! I've created a stunning portfolio website with modern design, smooth animations, and responsive layout. It includes hero section, projects showcase, and skills display! 👀 Check the live preview to see your website and explore the interactive elements."
         };
       }
       
@@ -779,7 +779,7 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
 </html>`
             }
           ],
-          response: "Excellent! I've built a comprehensive admin dashboard with sidebar navigation, statistics cards, data tables, and a clean professional design. Perfect for managing your platform!"
+          response: "Excellent! I've built a comprehensive admin dashboard with sidebar navigation, statistics cards, data tables, and a clean professional design. Perfect for managing your platform! 👀 Check the live preview to explore the dashboard interface and navigation."
         };
       }
     }
@@ -1043,7 +1043,7 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
 </html>`
             }
           ],
-          response: "Perfect! I've created an intelligent chatbot interface with real-time messaging, typing indicators, and smooth animations. The AI responds naturally to user inputs!"
+          response: "Perfect! I've created an intelligent chatbot interface with real-time messaging, typing indicators, and smooth animations. The AI responds naturally to user inputs! 👀 Check the live preview to test the chatbot and see the conversation flow."
         };
       }
       
@@ -1364,16 +1364,16 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
 </html>`
             }
           ],
-          response: "Excellent! I've created a sophisticated AI data analyzer with drag-and-drop file upload, real-time analysis, statistical insights, and predictive modeling capabilities!"
+          response: "Excellent! I've created a sophisticated AI data analyzer with drag-and-drop file upload, real-time analysis, statistical insights, and predictive modeling capabilities! 👀 Check the live preview to try uploading files and see the AI analysis in action."
         };
       }
     }
     
     // Default responses for unrecognized commands
     const defaultResponses = {
-      game: "I can help you build games! Try commands like 'create snake game', 'build platformer', 'make puzzle game', or describe what kind of game you want to create.",
-      website: "I can help you build websites! Try commands like 'create portfolio', 'build dashboard', 'make landing page', or describe what kind of website you need.",
-      ai: "I can help you build AI applications! Try commands like 'create chatbot', 'build data analyzer', 'make image classifier', or describe what AI feature you want to implement."
+      game: "I can help you build games! Try commands like 'create snake game', 'build platformer', 'make puzzle game', or describe what kind of game you want to create. 👀 Once I generate your game, check the live preview to play and test it!",
+      website: "I can help you build websites! Try commands like 'create portfolio', 'build dashboard', 'make landing page', or describe what kind of website you need. 👀 After I build your site, check the live preview to see the design and functionality!",
+      ai: "I can help you build AI applications! Try commands like 'create chatbot', 'build data analyzer', 'make image classifier', or describe what AI feature you want to implement. 👀 When I create your AI app, check the live preview to interact with it!"
     };
     
     return {
