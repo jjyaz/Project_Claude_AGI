@@ -493,7 +493,13 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
           {/* Command Input */}
           <div className="bg-gray-800 border-t border-gray-700 p-4">
             <form onSubmit={handleCommand} className="flex items-center space-x-3">
-              <span className="text-green-400 font-mono">$</span>
+              <div className="w-6 h-6 rounded-full overflow-hidden border border-gray-600 flex-shrink-0">
+                <img 
+                  src="/claude ready.jpg" 
+                  alt="Claude"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <input
                 type="text"
                 value={currentCommand}
