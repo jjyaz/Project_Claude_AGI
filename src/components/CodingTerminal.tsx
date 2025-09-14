@@ -1867,11 +1867,12 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
               </div>
             </div>
             <div className="flex-1 bg-white overflow-auto">
-              <iframe
-                srcDoc={previewContent}
-                className="w-full h-full border-0"
-                title="Preview"
-              />
+              <div className="w-full h-full overflow-auto">
+                <div 
+                  dangerouslySetInnerHTML={{ __html: previewContent }}
+                  className="w-full h-full"
+                />
+              </div>
             </div>
           </div>
         )}
