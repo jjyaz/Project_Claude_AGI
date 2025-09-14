@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Terminal, Gamepad2, Globe, Brain, Send, Play, Save, Download, Settings, Upload, ChevronDown, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Terminal, Gamepad2, Globe, Brain, Send, Play, FileDown, Download, Settings, Upload, ChevronDown, ChevronRight, Eye, Code } from 'lucide-react';
 
 interface CodingTerminalProps {
   onBack: () => void;
@@ -26,6 +26,8 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewContent, setPreviewContent] = useState('');
 
   const modes = {
     game: {
@@ -169,6 +171,110 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
+
+  const handleExportCode = () => {
+    // Generate HTML content based on the project
+    const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${projectName || 'My Project'}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .feature {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>${projectName || 'My Project'}</h1>
+        <div class="feature">
+            <h3>Project Type: ${modes[selectedMode].title}</h3>
+            <p>${modes[selectedMode].description}</p>
+        </div>
+        <div class="feature">
+            <h3>Generated with Claude AGI</h3>
+            <p>This project was created using Claude Co-pilot Terminal.</p>
+        </div>
+        <div class="feature">
+            <h3>Ready for Development</h3>
+            <p>Your project structure is ready. Continue building with your favorite tools!</p>
+        </div>
+    </div>
+</body>
+</html>`;
+
+    // Create and download the file
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${projectName || 'my-project'}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    // Add export message to terminal
+    const exportLine: TerminalLine = {
+      id: Date.now().toString(),
+      type: 'system',
+      content: `📁 Project exported as ${projectName || 'my-project'}.html`,
+      timestamp: new Date()
+    };
+    
+    setTerminalLines(prev => [...prev, exportLine]);
+  };
+
+  const updatePreview = () => {
+    // Generate preview content based on project type and commands
+    const previewHtml = `
+      <div style="padding: 20px; font-family: Arial, sans-serif;">
+        <h2 style="color: #333; margin-bottom: 20px;">${projectName || 'My Project'} Preview</h2>
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+          <h3 style="color: #667eea; margin-top: 0;">Project Type: ${modes[selectedMode].title}</h3>
+          <p style="color: #666; margin-bottom: 0;">${modes[selectedMode].description}</p>
+        </div>
+        <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; border-left: 4px solid #2196f3;">
+          <h4 style="margin-top: 0; color: #1976d2;">Live Preview</h4>
+          <p style="color: #666; margin-bottom: 0;">Your ${selectedMode} project will appear here as you build it with Claude.</p>
+        </div>
+      </div>
+    `;
+    setPreviewContent(previewHtml);
+  };
+
+  useEffect(() => {
+    if (selectedMode) {
+      updatePreview();
+    }
+  }, [selectedMode, projectName]);
+
   const handleProjectSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newProjectName.trim()) {
@@ -312,8 +418,19 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
           </div>
 
           <div className="flex items-center space-x-2">
-            <button className="p-2 text-gray-400 hover:text-white transition-colors">
-              <Save className="w-5 h-5" />
+            <button 
+              onClick={() => setShowPreview(!showPreview)}
+              className={`p-2 transition-colors ${showPreview ? 'text-blue-400' : 'text-gray-400 hover:text-white'}`}
+              title="Toggle Preview"
+            >
+              <Eye className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={handleExportCode}
+              className="p-2 text-gray-400 hover:text-white transition-colors"
+              title="Export Code"
+            >
+              <FileDown className="w-5 h-5" />
             </button>
             <button className="p-2 text-gray-400 hover:text-white transition-colors">
               <Download className="w-5 h-5" />
@@ -325,9 +442,9 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
         </div>
       </div>
 
-      <div className="flex h-[calc(100vh-80px)]">
+      <div className={`flex h-[calc(100vh-80px)] ${showPreview ? 'divide-x divide-gray-700' : ''}`}>
         {/* Terminal */}
-        <div className="flex-1 flex flex-col">
+        <div className={`flex flex-col ${showPreview ? 'w-1/2' : 'flex-1'}`}>
           {/* Terminal Output */}
           <div 
             ref={terminalRef}
@@ -412,8 +529,35 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
           </div>
         </div>
 
+        {/* Preview Panel */}
+        {showPreview && (
+          <div className="w-1/2 flex flex-col">
+            <div className="bg-gray-800 bg-opacity-50 backdrop-blur-sm border-b border-gray-700 p-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Eye className="w-4 h-4 text-blue-400" />
+                  <span className="text-white font-medium">Live Preview</span>
+                </div>
+                <button
+                  onClick={() => setShowPreview(false)}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 bg-white overflow-auto">
+              <iframe
+                srcDoc={previewContent}
+                className="w-full h-full border-0"
+                title="Preview"
+              />
+            </div>
+          </div>
+        )}
+
         {/* Side Panel */}
-        <div className="w-80 bg-gray-800 bg-opacity-50 backdrop-blur-sm border-l border-gray-700 p-4">
+        <div className={`bg-gray-800 bg-opacity-50 backdrop-blur-sm border-l border-gray-700 p-4 ${showPreview ? 'w-64' : 'w-80'}`}>
           <div className="space-y-6">
             {/* Quick Actions */}
             <div>
