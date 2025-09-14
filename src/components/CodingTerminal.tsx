@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Terminal, Gamepad2, Globe, Brain, Send, Play, FileDown, Download, Settings, Upload, ChevronDown, ChevronRight, Eye, Code } from 'lucide-react';
+import { ArrowLeft, Terminal, Gamepad2, Globe, Brain, Send, Play, FileDown, Download, Upload, ChevronDown, ChevronRight, Eye, Code } from 'lucide-react';
 
 interface CodingTerminalProps {
   onBack: () => void;
@@ -434,9 +434,6 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
             </button>
             <button className="p-2 text-gray-400 hover:text-white transition-colors">
               <Download className="w-5 h-5" />
-            </button>
-            <button className="p-2 text-gray-400 hover:text-white transition-colors">
-              <Settings className="w-5 h-5" />
             </button>
           </div>
         </div>
