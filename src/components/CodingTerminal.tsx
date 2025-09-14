@@ -351,21 +351,6 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
               </div>
             </div>
 
-            {/* Claude Suggestions */}
-            <div>
-              <h3 className="text-white font-semibold mb-3">Claude Suggests</h3>
-              <div className="space-y-3">
-                {currentMode.examples.map((suggestion, index) => (
-                  <div key={index} className="p-3 bg-gray-700 bg-opacity-50 rounded-lg">
-                    <p className="text-gray-300 text-sm">{suggestion}</p>
-                    <button className="text-blue-400 text-xs mt-1 hover:text-blue-300">
-                      Try this →
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Project Stats */}
             <div>
               <h3 className="text-white font-semibold mb-3">Project Stats</h3>
