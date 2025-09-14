@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import LoadingScreen from './components/LoadingScreen';
 import UserSetup from './components/UserSetup';
 import ChatInterface from './components/ChatInterface';
+import CodingLoadingScreen from './components/CodingLoadingScreen';
+import CodingTerminal from './components/CodingTerminal';
 
-type AppState = 'landing' | 'loading' | 'setup' | 'chat';
+type AppState = 'landing' | 'loading' | 'setup' | 'chat' | 'coding-loading' | 'coding';
 
 function App() {
   const [appState, setAppState] = useState<AppState>('landing');
@@ -42,6 +44,14 @@ function App() {
     setAppState('loading');
   };
 
+  const handleCodeWithClaudeClick = () => {
+    setAppState('coding-loading');
+  };
+
+  const handleCodingLoadingComplete = () => {
+    setAppState('coding');
+  };
+
   const handleLoadingComplete = () => {
     setAppState('setup');
   };
@@ -60,6 +70,14 @@ function App() {
 
   if (appState === 'loading') {
     return <LoadingScreen onComplete={handleLoadingComplete} />;
+  }
+
+  if (appState === 'coding-loading') {
+    return <CodingLoadingScreen onComplete={handleCodingLoadingComplete} />;
+  }
+
+  if (appState === 'coding') {
+    return <CodingTerminal onBack={handleBackToLanding} />;
   }
 
   if (appState === 'setup') {
@@ -142,7 +160,10 @@ function App() {
               >
                 Challenge Claude
               </button>
-              <button className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25">
+              <button 
+                onClick={handleCodeWithClaudeClick}
+                className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25"
+              >
                 Code With Claude
               </button>
               <button className="px-8 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-gray-500/25">
