@@ -19,6 +19,9 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
   const [terminalLines, setTerminalLines] = useState<TerminalLine[]>([]);
   const [currentCommand, setCurrentCommand] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [projectName, setProjectName] = useState('');
+  const [showProjectDialog, setShowProjectDialog] = useState(false);
+  const [newProjectName, setNewProjectName] = useState('');
   const terminalRef = useRef<HTMLDivElement>(null);
 
   const modes = {
@@ -54,19 +57,19 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
         {
           id: '1',
           type: 'system' as const,
-          content: `🚀 Claude Co-pilot activated for ${modes[selectedMode].title} mode`,
+          content: `🚀 Claude Co-pilot activated for ${modes[selectedMode].title} mode${projectName ? ` - ${projectName}` : ''}`,
           timestamp: new Date()
         },
         {
           id: '2',
           type: 'claude' as const,
-          content: `Hello! I'm your coding co-pilot. I'll guide you through building your ${selectedMode === 'game' ? 'game' : selectedMode === 'website' ? 'website' : 'AI application'}. What would you like to create today?`,
+          content: `Hello! I'm your coding co-pilot. I'll guide you through building your ${selectedMode === 'game' ? 'game' : selectedMode === 'website' ? 'website' : 'AI application'}${projectName ? ` "${projectName}"` : ''}. What would you like to create today?`,
           timestamp: new Date()
         }
       ];
       setTerminalLines(welcomeMessages);
     }
-  }, [selectedMode]);
+  }, [selectedMode, projectName]);
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -134,6 +137,41 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
       setTerminalLines(prev => [...prev, outputLine, claudeResponse]);
       setIsProcessing(false);
     }, 1000 + Math.random() * 1500);
+  };
+
+  const handleCreateNewProject = () => {
+    setShowProjectDialog(true);
+  };
+
+  const handleProjectSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newProjectName.trim()) {
+      setProjectName(newProjectName.trim());
+      setTerminalLines([]);
+      setShowProjectDialog(false);
+      setNewProjectName('');
+      
+      // Re-trigger the welcome messages with the new project name
+      if (selectedMode) {
+        setTimeout(() => {
+          const welcomeMessages = [
+            {
+              id: Date.now().toString(),
+              type: 'system' as const,
+              content: `🚀 New project "${newProjectName.trim()}" created for ${modes[selectedMode].title} mode`,
+              timestamp: new Date()
+            },
+            {
+              id: (Date.now() + 1).toString(),
+              type: 'claude' as const,
+              content: `Perfect! Let's start building "${newProjectName.trim()}". I'm here to help you every step of the way. What's your first move?`,
+              timestamp: new Date()
+            }
+          ];
+          setTerminalLines(welcomeMessages);
+        }, 100);
+      }
+    }
   };
 
   if (!selectedMode) {
@@ -240,7 +278,9 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
               <IconComponent className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-white font-semibold">{currentMode.title} Mode</h2>
+              <h2 className="text-white font-semibold">
+                {currentMode.title} Mode{projectName && ` - ${projectName}`}
+              </h2>
               <p className="text-green-400 text-sm">Claude Co-pilot Active</p>
             </div>
           </div>
@@ -343,7 +383,13 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
                   <span>Run Project</span>
                 </button>
                 <button className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
-                  Create New File
+                  Create New Project
+                </button>
+                <button 
+                  onClick={handleCreateNewProject}
+                  className="w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                >
+                  Create New Project
                 </button>
                 <button className="w-full px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
                   Install Package
@@ -372,6 +418,44 @@ const CodingTerminal: React.FC<CodingTerminalProps> = ({ onBack }) => {
           </div>
         </div>
       </div>
+
+      {/* Project Name Dialog */}
+      {showProjectDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-white text-xl font-semibold mb-4">Create New Project</h3>
+            <form onSubmit={handleProjectSubmit}>
+              <input
+                type="text"
+                value={newProjectName}
+                onChange={(e) => setNewProjectName(e.target.value)}
+                placeholder="Enter project name..."
+                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 mb-4"
+                autoFocus
+              />
+              <div className="flex space-x-3">
+                <button
+                  type="submit"
+                  disabled={!newProjectName.trim()}
+                  className="flex-1 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg transition-colors disabled:cursor-not-allowed"
+                >
+                  Create Project
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowProjectDialog(false);
+                    setNewProjectName('');
+                  }}
+                  className="flex-1 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
