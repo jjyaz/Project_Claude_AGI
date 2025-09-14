@@ -63,7 +63,7 @@ function App() {
   }
 
   if (appState === 'setup') {
-    return <UserSetup onComplete={handleSetupComplete} />;
+    return <UserSetup onComplete={handleSetupComplete} onBack={handleBackToLanding} />;
   }
 
   if (appState === 'chat') {

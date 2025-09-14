@@ -3,9 +3,10 @@ import { User, Upload } from 'lucide-react';
 
 interface UserSetupProps {
   onComplete: (username: string, profilePic: string | null) => void;
+  onBack: () => void;
 }
 
-const UserSetup: React.FC<UserSetupProps> = ({ onComplete }) => {
+const UserSetup: React.FC<UserSetupProps> = ({ onComplete, onBack }) => {
   const [username, setUsername] = useState('');
   const [profilePic, setProfilePic] = useState<string | null>(null);
 
@@ -93,6 +94,15 @@ const UserSetup: React.FC<UserSetupProps> = ({ onComplete }) => {
               className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-600 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
             >
               Begin Conversation
+            </button>
+            
+            {/* Back Button */}
+            <button
+              type="button"
+              onClick={onBack}
+              className="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
+            >
+              Back
             </button>
           </form>
         </div>
